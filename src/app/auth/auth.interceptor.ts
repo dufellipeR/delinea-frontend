@@ -17,7 +17,15 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let loggedInUser = this.authService.loggedInUser;
+    console.log(localStorage.getItem('loggedInUser' ) || "");
+    if (localStorage.getItem('loggedInUser')) {
+      console.log('no user logged');
+
+    }
     this.token = JSON.parse(localStorage.getItem('loggedInUser' ) || "");
+
+
+
     if (this.token) {
         request = request.clone({
             setHeaders: {

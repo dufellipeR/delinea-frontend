@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import {  FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -8,26 +9,38 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  signinForm!: FormGroup;
+  form!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router
+    ) { }
+
+
+//   ngOnInit() {
+//     this.signinForm = this.fb.group({
+//         email: [null, [Validators.required, Validators.email]],
+//         password: [null, Validators.required]
+//     },{ updateOn: 'change'});
+// }
 
   ngOnInit(): void {
-    this.signinForm = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
+    this.form = new FormGroup({
+      email: new FormControl(null, [Validators.required]),
       password: new FormControl(null, [Validators.required]),
 
     }, { updateOn: 'change'});
   }
 
-  get form(){
-      return this.signinForm.controls;
+  get f(){
+    return this.form.controls;
   }
 
-  onSubmit() {
-    this.authService.loginUser(this.signinForm.value).subscribe((res:any) => {
-      console.log(res);
+  submit() {
+    console.log(this.form.value);
 
+    this.authService.loginUser(this.form.value).subscribe((res:any) => {
+      console.log(res);
     });
   }
 }

@@ -9,7 +9,7 @@ import { Reply } from './reply';
   providedIn: 'root'
 })
 export class AuthService {
-  public baseUrl = "localhost:8000";
+  public baseUrl = "https://backend-delinea.herokuapp.com/auth/login/";
   private loggedUserSubject!: BehaviorSubject<Reply>;
   public loggedInUser!: Observable<any>;
 
