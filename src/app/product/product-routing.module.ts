@@ -4,13 +4,14 @@ import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
 import { IndexComponent } from './index/index.component';
 import { ViewComponent } from './view/view.component';
+import { AuthGuard} from '../auth/auth.guard'
 
 const routes: Routes = [
   { path: 'product', redirectTo: 'product/index', pathMatch: 'full'},
-  { path: 'product/index', component: IndexComponent },
-  { path: 'product/:productId/view', component: ViewComponent },
-  { path: 'product/create', component: CreateComponent },
-  { path: 'product/:productId/edit', component: EditComponent }
+  { path: 'product/index', component: IndexComponent, canActivate: [AuthGuard] },
+  { path: 'product/:productId/view', component: ViewComponent, canActivate: [AuthGuard] },
+  { path: 'product/create', component: CreateComponent, canActivate: [AuthGuard] },
+  { path: 'product/:productId/edit', component: EditComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
