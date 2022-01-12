@@ -4,39 +4,45 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from './user';
 import { map } from 'rxjs/operators';
 import { Reply } from './reply';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  public baseUrl = "https://backend-delinea.herokuapp.com/auth/login/";
-  private loggedUserSubject!: BehaviorSubject<Reply>;
-  public loggedInUser!: Observable<any>;
+  private currentUserSubject: BehaviorSubject<Reply>;
+  public currentUser: Observable<Reply>;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    // @ts-ignore
+    this.currentUserSubject = new BehaviorSubject<Reply>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
+   }
+
+  public get currentUserValue(): Reply {
+    return this.currentUserSubject.value;
+  }
 
 
 
-  loginUser(user: User) {
-    return this.http.post<Reply>(`${this.baseUrl}/`, user)
-        .pipe(map(response=> {
-            localStorage.setItem('loggedInUser', JSON.stringify(response.tokens.access));
-            this.loggedUserSubject.next(response);
-            console.log(response);
-            return response;
+
+  login(email: string, password: string) {
+    return this.http.post<any>('https://backend-delinea.herokuapp.com/auth/login/', { email, password })
+        .pipe(map(user => {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+            return user;
         }));
   }
 
-  logoutUser() {
-      localStorage.removeItem('loggedInUser');
-      this.loggedUserSubject.next({ email: '', username: '' , tokens: {
-        access: '',
-        refresh: '',
-      }});
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUser');
+    // @ts-ignore
+    this.currentUserSubject.next(null);
+
   }
 
-  public get loggedInUserValue(){
-      return this.loggedUserSubject.value;
-  }
 
 }

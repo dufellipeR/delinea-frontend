@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {  FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
     ) { }
 
 
@@ -39,8 +41,20 @@ export class LoginComponent implements OnInit {
   submit() {
     console.log(this.form.value);
 
-    this.authService.loginUser(this.form.value).subscribe((res:any) => {
-      console.log(res);
+    this.authService.login(this.form.value['email'], this.form.value['password'])
+    .pipe(first())
+    .subscribe({
+        next: () => {
+            // get return url from route parameters or default to '/'
+            // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+            this.router.navigateByUrl('product/index');
+        },
+        error: error => {
+          console.log('error' + error);
+
+        }
     });
+
+
   }
 }

@@ -7,33 +7,32 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  token!: null;
-
   constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let loggedInUser = this.authService.loggedInUser;
-    console.log(localStorage.getItem('loggedInUser' ) || "");
-    if (localStorage.getItem('loggedInUser')) {
-      console.log('no user logged');
+    // add auth header with jwt if user is logged in and request is to the api url
+    console.log('entrou');
 
-    }
-    this.token = JSON.parse(localStorage.getItem('loggedInUser' ) || "");
+    const currentUser = this.authService.currentUserValue;
+    console.log(currentUser);
 
+    const isLoggedIn = currentUser && currentUser.tokens.access;
+    console.log(isLoggedIn);
 
-
-    if (this.token) {
+    const isApiUrl = request.url.startsWith(environment.apiUrl);
+    if (isLoggedIn && isApiUrl ) {
         request = request.clone({
             setHeaders: {
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${currentUser.tokens.access}`
             }
         });
     }
 
     return next.handle(request);
-  }
+}
 }
