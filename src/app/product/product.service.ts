@@ -18,11 +18,14 @@ export class ProductService {
     })
   }
 
-  constructor(private httpClient: HttpClient) { }
+  private userToken!: string;
+
+  constructor(private httpClient: HttpClient) {
+  }
+
 
 
      getAll(): Observable<any> {
-
       return this.httpClient.get(this.apiURL + '/product/')
 
       .pipe(

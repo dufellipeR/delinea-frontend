@@ -19,7 +19,6 @@ export class CreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      id: new FormControl(null, [Validators.required]),
       title: new FormControl(null, [Validators.required]),
       content: new FormControl(null, [Validators.required]),
       price: new FormControl(null, [Validators.required])

@@ -21,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ProductRoutingModule,
     FormsModule,
     ReactiveFormsModule
-  ]
+  ],
+
 })
 export class ProductModule { }

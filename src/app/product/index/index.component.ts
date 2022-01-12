@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
 import { Reply } from '../reply';
@@ -12,11 +14,8 @@ import { Reply } from '../reply';
 export class IndexComponent implements OnInit {
 
 
-  products: Product[] = [
-    {id: 5, content: 'Blood of Elves', title: 'book', price: 250, created_datetime: Date.now()}
-  ]
-
-  constructor(public productService: ProductService) { }
+  products!: Product[]
+  constructor(public productService: ProductService, public authService: AuthService, public router: Router) { }
 
   ngOnInit(): void {
     this.productService.getAll().subscribe((data: Reply)=>{
@@ -26,12 +25,19 @@ export class IndexComponent implements OnInit {
   }
 
 
+
+
      deleteProduct(id:number){
 
       this.productService.delete(id).subscribe(res => {
            this.products = this.products.filter(item => item.id !== id);
            console.log('Product deleted successfully!');
       })
+    }
+
+    logout() {
+      this.authService.logout()
+      this.router.navigateByUrl('');
     }
 
 }

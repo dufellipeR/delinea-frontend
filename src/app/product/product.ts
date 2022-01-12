@@ -3,6 +3,6 @@ export interface Product {
   title: string;
   content: string;
   price: number;
-  created_datetime: number
+  created_datetime: string;
 
 }

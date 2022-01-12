@@ -5,26 +5,13 @@
   </div>
   <form [formGroup]="form" (ngSubmit)="submit()">
 
-    <div class="form-group">
-      <label for="id">ID:</label>
-      <input
-          formControlName="id"
-          id="id"
-          type="number"
-          class="form-control">
-      <div *ngIf="f['id']?.touched && f['id']?.invalid" class="alert alert-danger">
-
-        <div *ngIf="f['id'].errors && f['id'].errors['required']">ID is required.</div>
-
-      </div>
-  </div>
-
       <div class="form-group">
           <label for="title">Title:</label>
           <input
               formControlName="title"
               id="title"
               type="text"
+              [(ngModel)]="product.title"
               class="form-control">
           <div *ngIf="f['title']?.touched && f['title']?.invalid" class="alert alert-danger">
 
@@ -39,6 +26,7 @@
               formControlName="content"
               id="content"
               type="text"
+              [(ngModel)]="product.content"
               class="form-control">
           </textarea>
           <div *ngIf="f['content']?.touched && f['content']?.invalid" class="alert alert-danger">
@@ -53,6 +41,7 @@
             formControlName="price"
             id="price"
             type="number"
+            [(ngModel)]="product.price"
             class="form-control">
         <div *ngIf="f['price']?.touched && f['price']?.invalid" class="alert alert-danger">
             <div *ngIf="f['price'].errors && f['price'].errors['required']">Price is required.</div>

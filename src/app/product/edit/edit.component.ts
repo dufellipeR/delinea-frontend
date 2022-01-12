@@ -25,17 +25,18 @@ export class EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['productId'];
-    this.product = {id: 5, content: 'Blood of Elves', title: 'book', price: 250,created_datetime: Date.now()};
-    // this.productService.find(this.id).subscribe((data: Product)=>{
-    //   this.product = data;
+    // this.product = {id: 5, content: 'Blood of Elves', title: 'book', price: 250, created_datetime: ''};
+    this.productService.find(this.id).subscribe((data: Product)=>{
+      console.log(data);
 
-    // });
+      this.product = data;
+
+    });
 
     this.form = new FormGroup({
-      id: new FormControl(this.product.id, [Validators.required]),
-      title: new FormControl(this.product.title, [Validators.required]),
-      content: new FormControl(this.product.content, [Validators.required]),
-      price: new FormControl(this.product.price, [Validators.required])
+      title: new FormControl(null , Validators.required),
+      content: new FormControl(null, Validators.required),
+      price: new FormControl(null, Validators.required)
     });
   }
 
